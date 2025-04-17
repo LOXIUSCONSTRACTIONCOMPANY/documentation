@@ -67,6 +67,9 @@ localization:
    * - :guilabel:`Brazilian Accounting EDI` & :guilabel:`Brazilian Accounting EDI for services`
      - `l10n_br_edi` & `l10n_br_edi_services`
      - Provides electronic invoicing for goods and services for Brazil through AvaTax.
+   * - :guilabel:`Brazilian Accounting EDI for POS`
+     - `l10n_br_edi_pos`
+     - Provides electronic invoicing for Brazil through Avatax in the POS.
    * - :guilabel:`Brazil Pix QR codes`
      - `l10n_br_pix`
      - Implements Pix QR codes for Brazil.
@@ -518,6 +521,8 @@ It is possible to cancel an electronic invoice that was validated by the governm
    Check whether the electronic invoice is still within the cancellation deadline, which may vary
    according to the legislation of each state.
 
+.. _brazil/e-invoice-nf-e:
+
 E-invoices for goods (NF-e)
 ***************************
 
@@ -579,6 +584,173 @@ journal, and click the :menuselection:`⚙️ (gear) icon --> Invalidate Number 
 .. note::
    The log of the cancelled numbers along with the XML file are recorded in the chatter of the
    journal.
+
+PoS NFC-e
+---------
+
+The NFC-e in Brazil is a legal document that supports the selling of goods or merchandise for final
+consumer. Just like the :ref:`NF-e <brazil/e-invoice-nf-e>`, the electronic consumer invoice is also
+issued in XML file format and has an auxiliary document (DANFC-e) also known as the *NFC-e Summary*.
+This electronic document can be issued through **Odoo Point of Sale app**.
+
+Its legal validity is guaranteed by the digital signature and by SEFAZ (Secretaria da Fazenda) of
+each Brazilian state.
+
+.. seealso::
+   :doc:`../../sales/point_of_sale`
+
+Configuration
+~~~~~~~~~~~~~
+
+:ref:`Install <general/install>` the :guilabel:`Brazilian Accounting EDI for POS` (`l10nbr_edi_pos`)
+module.
+
+CSC details
+~~~~~~~~~~~
+
+Go to :menuselection:`Accounting --> Configuration --> Settings`, scroll to the :guilabel:`Taxes`
+section and find the :guilabel:`Avatax Brazil` section. Complete the following CSC (Taxpayer
+Security Code) fields:
+
+- :guilabel:`CSC ID`: The *CSC ID* or *CSC Token* is an identification of the taxpayer security
+  code, which can have 1 to 6 digits and is available on the website of the State Department of
+  Finance (SEFAZ) of your state.
+- :guilabel:`CSC Number`: The *CSC Number* is a code of up to 36 characters that only you and the
+  Department of Finance know. It is used to generate the QR Code of the NFC-e and ensure the
+  authenticity of the DANFE.
+
+.. note::
+   The information required for these fields can be generated through the SEFAZ website of each
+   Brazilian state by the company's accountant.
+
+Product configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+First :doc:`create a new product in POS <../../sales/point_of_sale/configuration>`, then in the
+:guilabel:`Sales` tab, configure the following :guilabel:`Brazil Accounting` fields:
+
+- :guilabel:`CEST Code`: A tax classification code used to identify goods and products subject to
+  tax substitution under ICMS regulations. It helps determine the applicable tax treatment and
+  procedures for specific items. Check if your product is subject or not to this in
+  https://www.codigocest.com.br/.
+- :guilabel:`Mercosul NCM Code`: NCM (Nomenclatura Comun do Mercosul) code from the Mercosur list.
+- :guilabel:`Source of Origin`: Indicates if the product has a foreign or national origin with
+  different variations and characteristics depending on the product use case.
+- :guilabel:`SPED Fiscal Product Type`: Fiscal product type according to SPED list table.
+- :guilabel:`Purpose of Use`: Indicates what this product is used for.
+
+Shop configuration
+~~~~~~~~~~~~~~~~~~
+
+Go to :menuselection:`Point of Sale --> Configuration --> Point of Sales` and create a
+:guilabel:`New` shop. Choose an internal name for the new POS and save.
+
+Then, go to :menuselection:`Point of Sale --> Configuration --> Settings` and scroll to the
+:guilabel:`Accounting` section, configure the :guilabel:`Brazilian EDI` fields. Make sure that the
+correct Point of Sale is :doc:`selected at the top of the screen
+<../../sales/point_of_sale/configuration>`.
+
+- :guilabel:`Series`
+- :guilabel:`Next number`: the next NFC-e number in the sequence to be issued, for instance, if the
+  last number issued in SEFAZ is `100`, the *Next number* will be `101`.
+
+.. note::
+   For the production environment, make sure that this information is updated.
+
+.. _brazil/generate-nfc-e:
+
+Generating an NFC-e
+~~~~~~~~~~~~~~~~~~~
+
+First, :ref:`open the Shop and make a sale <pos/session-start>`.
+
+After validating the payment, Odoo calculates taxes and issues an NFC-e. The valid NFC-e appears on
+the right side of the screen.
+
+.. image:: brazil/l10n-br-nfce-succesfully-issued.png
+   :alt: NFC-e Success in a POS session.
+
+.. note::
+   It is also possible to issue an NFC-e that identifies the customer by their CPF/CNPJ. To do so,
+   click on the :icon:`fa-user` :guilabel:`Customer` button, then search for the customer if they
+   are already registered or click on :guilabel:`Create`.
+
+   The following are mandatory fields to issue an CPF/CNPJ identified NFC-e:
+
+   - :guilabel:`Name`
+   - :guilabel:`City` and :guilabel:`State` of where the invoice is being issued
+   - :guilabel:`CPF/CNPJ`
+
+After saving the register, click on :guilabel:`Validate`, and the NFC-e appears highlighting the
+customer's CPF on the print.
+
+Finally, there are two options to deliver the invoice to the customer:
+
+- :guilabel:`Print`
+- :guilabel:`Send via e-mail`
+
+NFC-e ticket print
+~~~~~~~~~~~~~~~~~~
+
+After :ref:`generating and validating the NFC-e <brazil/generate-nfc-e>`, deliver the invoice by
+clicking :guilabel:`Print`.
+
+.. example::
+   .. figure:: brazil/l10n-br-nfc-e-print.png
+      :alt: Printed NFC-e ticket example.
+
+      This is the DANFC-e, the print of NFC-e when it is successfully issued and showing all the
+      important information that is legally required.
+
+.. tip::
+   #. There's no need to use an :doc:`Odoo IoT Box <../../general/iot>` to integrate the print NFC-e
+      through the **Point of Sale** app.
+   #. The Odoo NFC-e feature works with any thermal printer.
+
+Re-issue PoS Order with NFC-e error
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the NFC-e return an error, first correct the error, then issue the NFC-e again by going to
+:icon:`fa-bars` :menuselection:`(menu) --> Orders`.
+
+Filter for :guilabel:`Paid` orders and click on the :guilabel:`Details` button. From here, the error
+is presented and the :guilabel:`Send NFC-e` button can be clicked.
+
+.. note::
+   If the error was fixed and the PoS Session was closed, Odoo indicates the tax adjustment on that
+   journal entry in the chatter. The journal entry of the order indicates that the taxes were not
+   calculated correctly and after reprocessing the NFC-e is necessary.
+
+.. image:: brazil/l10n-br-order-error-screen.png
+   :alt: Point of sale order view form.
+
+NFC-e refunds & cancellations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Odoo allow *refunds* to be created from Odoo, but *cancellations* must be done from the government
+portal.
+
+.. important::
+   SEFAZ only allows users to cancel an NFC-e **within 30 minutes** after it has been issued
+   directly on the SEFAZ website. After this time, a manual refund would need to be made along with
+   issuing a *Return of Goods NF-e*.
+
+To issue a refund, go to :icon:`fa-bars` :menuselection:`(menu) --> Orders`, filter for
+:guilabel:`Paid` orders, open the order and click the :guilabel:`Refund` button.
+
+Choose the :guilabel:`Payment method` and :guilabel:`Amount`, then click :guilabel:`Refund payment`.
+
+.. note::
+   Alternatively, reimburse and cancel the NFC-e through the backend by going to
+   :menuselection:`Point of Sale --> Orders --> Orders`. Open the order and select the customer,
+   then click the :guilabel:`Payment` button to reimburse. Then click the :guilabel:`Invoice` button
+   at the top of the screen to create the invoice and issue the *Return of Goods NF-e*.
+
+When the process is finalized, the approved return NF-e is created, meaning the
+**previous NFC-e is canceled**.
+
+.. image:: brazil/l10n-br-return-succeed.png
+   :alt: Return of Goods NF-e Approved.
 
 Vendor bills
 ------------
