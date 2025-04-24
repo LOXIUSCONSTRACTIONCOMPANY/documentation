@@ -13,13 +13,14 @@
     }
     var AccountsTable = React.createClass({
         render: function () {
+            const borderStyle = { border: '1px solid rgba(255, 255, 255, 0)' };
             return React.DOM.div(
                 { style: { marginTop: '0' } },
                 React.DOM.div(// P&L
-                    highlight(this.props.current === 'p-l'),
+                    Object.assign({}, highlight(this.props.current === 'p-l'), { style: borderStyle }),
                     React.DOM.h4(null, "Profit & Loss"),
                     React.DOM.div(
-                        null,
+                        { style: borderStyle },
                         React.DOM.h5(
                             highlight(null, this.props.current === 'retained'),
                             "Net Profit"),
@@ -43,7 +44,7 @@
                             )
                         ),
                         React.DOM.div(
-                            highlight(this.props.current === 'opex'),
+                            Object.assign({}, highlight(this.props.current === 'opex'), { style: borderStyle }),
                             React.DOM.h5(null, "Operating Income or Loss"),
                             React.DOM.dl(
                                 null,
@@ -58,7 +59,7 @@
                             )
                         ),
                         React.DOM.dl(
-                            null,
+                            { style: borderStyle },
                             React.DOM.dt(null, "Plus ", "Other Income"),
                             React.DOM.dd(
                                 null,
@@ -77,13 +78,13 @@
                     )
                 ),
                 React.DOM.div(//Balance Sheet
-                    highlight(this.props.current === 'balance'),
+                    Object.assign({}, highlight(this.props.current === 'balance'), { style: borderStyle }),
                     React.DOM.h4(null, "Balance Sheet"),
                     React.DOM.div(
-                        null,
+                        { style: borderStyle },
                         React.DOM.h5(null, "Net Assets"),
                         React.DOM.div(
-                            null,
+                            { style: borderStyle },
                             React.DOM.h5(highlight(this.props.current === 'assets'), "Total Assets"),
                             React.DOM.dl(
                                 highlight(null, this.props.current === 'assets'),
@@ -103,7 +104,7 @@
                             )
                         ),
                         React.DOM.dl(
-                            highlight(this.props.current === 'liabilities'),
+                            Object.assign({}, highlight(this.props.current === 'liabilities'), { style: borderStyle }),
                             React.DOM.dt(null, "Less ", "Current Liabilities"),
                             React.DOM.dd(
                                 null,
