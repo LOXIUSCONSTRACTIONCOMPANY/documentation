@@ -5,7 +5,7 @@ Certifications
 When jobs require specific knowledge, it is necessary to track employee certifications to ensure the
 necessary knowledge and certifications are in place.
 
-Certifications include classes, tests, professional seminars, and more. There are no restrictions in
+Certifications include classes, tests, professional seminars, and more. No restrictions are set in
 terms of what type of certification records can be added in Odoo.
 
 .. important::
@@ -32,14 +32,13 @@ expired certifications appear in red, and certifications that are going to expir
 90 days appear in orange.
 
 .. image:: certifications/certifications.png
-   :align: center
    :alt: The list of employee certifications.
 
 .. important::
    **Only** certification records with the *Display Type* set to *Certification* on their
    :ref:`certification form <employees/certifications-form>` appear on the :guilabel:`Employee
    Certifications` report. All other certifications appear in the resume section of the
-   :doc:`employee form <new_employee>`.
+   :ref:`employee form <employees/resume>`.
 
 View certifications by expiration status
 ----------------------------------------
@@ -49,19 +48,18 @@ determine which employees need to keep necessary certifications current in the d
 this scenario, it is beneficial to view the certifications by expiration status.
 
 To do so, navigate to :menuselection:`Employees app --> Reporting --> Certifications`. Next, click
-the :icon:`fa-caret-down` :guilabel:`(down arrow)` in the search bar, then click :guilabel:`Add
-Custom Group`, revealing a drop-down menu. Click :guilabel:`Expiration Status`, then click away from
-the drop-down menu to close it.
+the :icon:`fa-caret-down` :guilabel:`(Toggle Search Panel)` icon in the search bar, then click
+:guilabel:`Add Custom Group`  :icon:`fa-caret-down`, revealing a drop-down menu. Click
+:guilabel:`Expiration Status`, then click away from the drop-down menu to close it.
 
 After doing so, all the certifications are organized by status, starting with :guilabel:`Expired`
 certifications, then certifications that are :guilabel:`Expiring` soon (within the next 90 days),
 and lastly, certifications that are still :guilabel:`Valid`.
 
-This view provides an easy way to see which employees have certifications that are going to expire
-soon, to determine which employees need to take action to keep their certifications current.
+This view provides a way to see which employees have certifications that are going to expire soon, to
+determine which employees need to take action to keep their certifications current.
 
 .. image:: certifications/status.png
-   :align: center
    :alt: The list of employee certifications, grouped by status.
 
 .. _employees/certifications-form:
@@ -86,6 +84,10 @@ information on the form:
     section of the *Resume* tab on the :doc:`employee form <new_employee>`.
   - :guilabel:`Education`: Select this option to have the certification appear in the *Education*
     section of the *Resume* tab on the :doc:`employee form <new_employee>`.
+  - :guilabel:`Social Media`: Select this option to have the certification appear in the *Social
+    Media* section of the *Resume* tab on the :doc:`employee form <new_employee>`.
+  - :guilabel:`Side Projects`: Select this option to have the certification appear in the *Side
+    Projects* section of the *Resume* tab on the :doc:`employee form <new_employee>`.
   - :guilabel:`Internal Certification`: Select this option to have the certification appear in the
     *Internal Certification* section of the *Resume* tab on the :doc:`employee form <new_employee>`.
   - :guilabel:`Completed Internal Training`: Select this option to have the certification appear in
@@ -113,5 +115,14 @@ information on the form:
   selected, click :icon:`fa-check` :guilabel:`Apply`, and both fields are populated.
 
 .. image:: certifications/osha.png
-   :align: center
    :alt: A certification form filled out for an OSHA certificate for construction.
+
+.. note::
+   Once a certification is logged for an employee, a new certification can be added directly from the
+   employee form, instead of the :guilabel:`Employee Certifications` dashboard.
+
+   In the main **Employees** app dashboard, click on an employee profile to open their employee form.
+   In the :guilabel:`RESUME` tab, click the :guilabel:`ADD` button at the end of the
+   :guilabel:`Certification` line.
+
+   This :guilabel:`ADD` button **only** appears on employee prfiles that already have a certificaiton.
